@@ -1,0 +1,1308 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>ProposalPro — Demo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Neutral canvas — warm soft greige instead of stark white, easier on the eyes over long sessions */
+      --bg: #F0EEEA;
+      --surface: #FFFFFF;
+      --chip-bg: #E7E2DB;
+      --border: #DDD6CC;
+
+      /* Text */
+      --ink: #2B2420;
+      --muted: #7A6F64;
+      --muted-light: #A99E92;
+
+      /* Brand — deep wine red + muted sage green. Deliberately far from teal/orange. */
+      --primary: #6E2A3B;
+      --primary-dark: #4F1E2A;
+      --accent: #7C9473;
+      --accent-ink: #1E2A1B;
+
+      /* Status */
+      --success: #4C8C5B;
+      --danger: #C1483F;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .container {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* LEFT */
+
+    .left {
+      width: 70%;
+      padding: 30px;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .search {
+      width: 320px;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 14px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      font-size: 15px;
+      outline: none;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    .category-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .subcategory-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+
+    .category-pill {
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: white;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--ink);
+      white-space: nowrap;
+      transition: .15s;
+      user-select: none;
+    }
+
+    .category-pill:hover {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+    }
+
+    .category-pill.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .subcategory-pill {
+      padding: 7px 14px;
+      border-radius: 10px;
+      background: var(--chip-bg);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: .15s;
+      user-select: none;
+    }
+
+    .subcategory-pill:hover {
+      background: var(--border);
+    }
+
+    .subcategory-pill.active {
+      background: var(--accent);
+      color: var(--ink);
+    }
+
+    .card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      transition: .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+    }
+
+    .card img {
+      width: 100%;
+      height: 220px;
+      object-fit: contain;
+      background: white;
+      padding: 15px;
+    }
+
+    .card-body {
+      padding: 18px;
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .desc {
+      font-size: 14px;
+      color: var(--muted);
+      min-height: 45px;
+      margin-bottom: 12px;
+    }
+
+    .info {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary)
+    }
+
+    .add-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 12px;
+      background: var(--primary);
+      color: white;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .add-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    /* RIGHT */
+    .right {
+      width: 30%;
+      background: white;
+      border-left: 1px solid var(--border);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: sticky;
+      top: 0;
+    }
+
+    .kp-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 25px;
+    }
+
+    .kp-items {
+      flex: 1;
+      overflow: auto;
+      margin-bottom: 15px;
+    }
+
+    .kp-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 14px;
+    }
+
+    .kp-item img {
+      width: 70px;
+      height: 70px;
+      object-fit: contain;
+      border-radius: 10px;
+      background: var(--bg);
+    }
+
+    .kp-info {
+      flex: 1;
+    }
+
+    .kp-name {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .kp-price {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .remove-btn {
+      margin-top: 8px;
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .total {
+      display: none;
+    }
+
+    .download-btn {
+      margin-top: 20px;
+      width: 100%;
+      min-height: 56px;
+      padding: 0 16px;
+      border: none;
+      border-radius: 16px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: .2s;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      line-height: 1;
+      transition: all 0.2s ease;
+    }
+
+    .download-btn:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    .logo-img {
+      max-height: 50px;
+      max-width: 180px;
+      object-fit: contain;
+    }
+
+    .card-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .qty-btn {
+      width: 38px;
+      height: 38px;
+      border: none;
+      border-radius: 10px;
+      background: var(--primary);
+      color: white;
+      font-size: 20px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .qty-value {
+      min-width: 34px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    .added-badge {
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--success);
+      font-weight: 700;
+    }
+
+    .discount-box {
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .discount-box label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .discount-input-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .discount-input {
+    width: 70px;
+    padding: 7px 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  .discount-input-wrapper span {
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+
+  
+      .kp-discount-price {
+        margin-top: 4px;
+        color: var(--primary);
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+    .kp-qty {
+      margin-top: 5px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--success);
+    }
+
+    .download-btn.loading {
+      opacity: 0.75;
+      cursor: not-allowed;
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(0, 0, 0, 0.25);
+      border-top-color: var(--ink);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+
+
+
+   .login-page{
+      width:100%;
+      height:100vh;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      background:var(--bg);
+  }
+
+  .login-card{
+      width:380px;
+      background:var(--surface);
+      padding:40px;
+      border-radius:18px;
+      box-shadow:0 15px 40px rgba(0,0,0,.08);
+      text-align:center;
+  }
+
+  .login-logo{
+      width:140px;
+      margin-bottom:20px;
+  }
+
+  .login-card h2{
+      color:var(--primary);
+      margin-bottom:8px;
+  }
+
+  .login-card p{
+      color:var(--muted);
+      margin-bottom:25px;
+  }
+
+  .login-card input{
+      width:100%;
+      box-sizing:border-box;
+      padding:12px;
+      margin-bottom:15px;
+      border:1px solid var(--border);
+      border-radius:10px;
+  }
+
+  .login-card button{
+      width:100%;
+      padding:12px;
+      border:none;
+      border-radius:10px;
+      background:var(--primary);
+      color:white;
+      font-size:16px;
+      cursor:pointer;
+      transition:.2s;
+  }
+
+  .login-card button:hover{
+      background:var(--primary-dark);
+  }
+
+  #loginError{
+      margin-top:15px;
+      color:var(--danger);
+  }
+
+    .empty {
+      color: var(--muted-light);
+    }
+
+    @media(max-width:1000px) {
+
+      .container {
+        flex-direction: column;
+      }
+
+      .left,
+      .right {
+        width: 100%;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="loginPage" class="login-page">
+
+    <div class="login-card">
+  
+      <img src="assets/logo.png" class="login-logo">
+  
+      <h2>ProposalPro</h2>
+  
+      <p>Демо-версія системи формування комерційних пропозицій</p>
+  
+      <input
+        id="login"
+        type="text"
+        placeholder="Логін"
+      >
+  
+      <input
+        id="password"
+        type="password"
+        placeholder="Пароль"
+      >
+  
+      <button onclick="login()">
+        Увійти
+      </button>
+  
+      <div id="loginError"></div>
+
+      <p style="margin-top:18px;font-size:13px;color:var(--muted-light);">
+        Демо-доступ: <b>demo</b> / <b>demo</b>
+      </p>
+  
+    </div>
+  
+  </div>
+
+
+<div id="app" style="display:none;">
+  <div class="container">
+
+    <!-- LEFT -->
+
+    <div class="left">
+
+      <div class="topbar">
+
+        <div class="logo">
+          <img src="assets/logo.png" alt="ProposalPro" class="logo-img">
+        </div>
+
+        <input type="text" id="search" class="search" placeholder="Пошук товарів..." oninput="searchProducts()" />
+
+      </div>
+
+      <div class="category-bar" id="categoryBar"></div>
+      <div class="subcategory-bar" id="subcategoryBar"></div>
+
+      <div class="products" id="products"></div>
+
+    </div>
+
+    <!-- RIGHT -->
+
+    <div class="right">
+
+      <div class="kp-title">
+        Комерційна пропозиція
+      </div>
+      <div style="margin-bottom:15px; display:flex; flex-direction:column; gap:10px;">
+
+        <input id="clientName" placeholder="Ім'я клієнта"
+          style="padding:10px;border:1px solid var(--border);border-radius:10px;" />
+
+        <input id="clientDate" type="date" style="padding:10px;border:1px solid var(--border);border-radius:10px;" />
+        <select id="managerSelect" style="padding:10px;border:1px solid var(--border);border-radius:10px;">
+          <option value="">Оберіть менеджера</option>
+        </select>
+
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;">
+          <input type="checkbox" id="deliveryCheckbox">
+          Включити доставку та налаштування
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;">
+          <input type="checkbox" id="installmentCheckbox">
+          Коротка розстрочка
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;">
+          <input type="checkbox" id="longInstallmentCheckbox">
+          Довга розстрочка
+        </label>
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;">
+          <input type="checkbox" id="grandTotalCheckbox">
+          Показувати загальну суму (Grand Total)
+        </label>
+
+
+
+        <div id="managerInfo" style="
+            margin-top:10px;
+            font-size:14px;
+            color:var(--muted);
+          "></div>
+        <div id="managerInfo" style="
+            margin-top:10px;
+            font-size:14px;
+          color:var(--muted);
+        "></div>
+      </div>
+
+      <div class="kp-items" id="kpItems">
+
+        <div class="empty">
+          Товари ще не додані
+        </div>
+
+      </div>
+
+      <div class="total" id="total">
+        Загалом: 0 UAH
+      </div>
+
+      <button id="downloadBtn" class="download-btn" onclick="downloadDOCX()">
+        📄 Завантажити DOCX
+      </button>
+
+    </div>
+
+  </div>
+
+  <script>
+
+    // =====================================================================
+    // DEMO CONFIG — this is the ONLY block you need to touch to point the
+    // demo at your own data. Do not reuse a real client's URLs here.
+    //
+    // BACKEND_URL   — your deployed copy of the demo server.js
+    // API_URL       — Google Apps Script "Web App" URL that returns your
+    //                 demo products as JSON (array of {ID,Name,Description,
+    //                 Country,Price,Photo}). Deploy from a Google Sheet with
+    //                 a small Apps Script that does:
+    //                   function doGet(){
+    //                     const rows = SpreadsheetApp.getActive()
+    //                       .getSheetByName('Products').getDataRange().getValues();
+    //                     const headers = rows.shift();
+    //                     const data = rows.map(r =>
+    //                       Object.fromEntries(headers.map((h,i)=>[h, r[i]])));
+    //                     return ContentService.createTextOutput(JSON.stringify(data))
+    //                       .setMimeType(ContentService.MimeType.JSON);
+    //                   }
+    //                 then Deploy > Web app > Execute as me > Anyone can access.
+    // MANAGERS_URL  — a Google Sheet published as CSV (File > Share > Publish
+    //                 to web > CSV), with columns Name, Phone, Email, Active.
+    // =====================================================================
+    const BACKEND_URL = "http://localhost:3001";
+    const API_URL = "https://script.google.com/macros/s/AKfycbxcQbzVLxdbJhlyqDi9W9cF90oEXt4ZQfFl6aFMP8WIaOZT7KPDixiLLNsBjS8QWju-wg/exec";
+    const MANAGERS_URL = "https://docs.google.com/spreadsheets/d/1Mi5DmYBcmVrDGgNjMwatmCynAyyuq76u2XuejIgi7A8/export?format=csv";
+ 
+
+    let managers = [];
+    let products = [];
+    let selected = [];
+
+    /* LOAD */
+    async function login(){
+
+    const username =
+      document.getElementById("login").value.trim();
+
+    const password =
+      document.getElementById("password").value.trim();
+
+
+    try {
+
+      const response = await fetch(
+        `${BACKEND_URL}/login`,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":"application/json"
+          },
+
+          body: JSON.stringify({
+            username,
+            password
+          })
+        }
+      );
+
+
+      const data = await response.json();
+
+
+      if(data.success){
+
+        localStorage.setItem(
+          "logged",
+          "true"
+        );
+
+
+        document.getElementById("loginPage").style.display="none";
+
+        document.getElementById("app").style.display="block";
+
+
+        loadProducts();
+        loadManagers();
+
+
+      }else{
+
+
+        document.getElementById("loginError").innerHTML =
+        "Невірний логін або пароль";
+
+
+      }
+
+
+    } catch(error){
+
+      console.error(error);
+
+      document.getElementById("loginError").innerHTML =
+      "Помилка сервера";
+
+    }
+
+    }
+    function parsePrice(value) {
+      return Number(String(value || "0").replace(/[^\d.,]/g, "").replace(",", ".")) || 0;
+    }
+
+    function formatPrice(value) {
+      return Math.round(value).toLocaleString("uk-UA") + " UAH";
+    }
+
+    function normalizeDiscount(value) {
+      const discount = Number(String(value).replace(",", ".")) || 0;
+      return Math.min(100, Math.max(0, discount));
+    }
+
+    function getDiscountedPrice(price, discount) {
+      return price - (price * discount / 100);
+    }
+
+    window.updateDiscount = function (index, value) {
+      selected[index].discount = (value);
+    };
+
+
+    function parseCSV(text) {
+      const lines = text.trim().split("\n");
+      const headers = lines[0].split(",").map(h => h.trim());
+
+      return lines.slice(1).map(line => {
+        const values = line.split(",").map(v => v.trim());
+        const obj = {};
+
+        headers.forEach((h, i) => {
+          obj[h] = values[i] || "";
+        });
+
+        return obj;
+      });
+    }
+
+    async function loadManagers() {
+      const res = await fetch(MANAGERS_URL);
+      const csv = await res.text();
+
+      managers = parseCSV(csv).filter(m =>
+        String(m.Active).toLowerCase() === "true"
+      );
+
+      const select = document.getElementById("managerSelect");
+
+      select.innerHTML = `<option value="">Оберіть менеджера</option>`;
+
+      managers.forEach((m, i) => {
+        select.innerHTML += `
+          <option value="${i}">
+            ${m.Name}
+          </option>
+        `;
+      });
+    }
+
+    document.addEventListener("change", function (e) {
+      if (e.target.id === "managerSelect") {
+        const manager = managers[e.target.value];
+
+        const info = document.getElementById("managerInfo");
+
+        if (!manager) {
+          info.innerHTML = "";
+          return;
+        }
+
+        info.innerHTML = `
+          📞 ${manager.Phone}<br>
+          ✉️ ${manager.Email}
+        `;
+      }
+    });
+
+
+
+
+    async function loadProducts() {
+
+      const res = await fetch(API_URL);
+
+      products = await res.json();
+
+      renderCategoryNav();
+      applyFilters();
+    }
+
+    /* CATEGORIES */
+
+    let selectedCategory = null;
+    let selectedSubcategory = null;
+
+    function escapeAttr(str) {
+      return String(str).replace(/'/g, "\\'").replace(/"/g, "&quot;");
+    }
+
+    function buildCategoryMap() {
+      const map = {};
+
+      products.forEach(p => {
+        const cat = (p.Category || "").trim() || "Інше";
+        const sub = (p.Subcategory || "").trim();
+
+        if (!map[cat]) map[cat] = new Set();
+        if (sub) map[cat].add(sub);
+      });
+
+      return map;
+    }
+
+    function renderCategoryNav() {
+
+      const map = buildCategoryMap();
+      window._categoryMap = map;
+
+      const bar = document.getElementById("categoryBar");
+      const categories = Object.keys(map);
+
+      if (categories.length === 0) {
+        bar.innerHTML = "";
+        document.getElementById("subcategoryBar").innerHTML = "";
+        return;
+      }
+
+      bar.innerHTML = `
+        <div class="category-pill ${!selectedCategory ? "active" : ""}" onclick="selectCategory(null)">
+          Усі категорії
+        </div>
+      ` + categories.map(cat => `
+        <div class="category-pill ${selectedCategory === cat ? "active" : ""}" onclick="selectCategory('${escapeAttr(cat)}')">
+          ${cat}
+        </div>
+      `).join("");
+
+      renderSubcategoryNav();
+    }
+
+    function renderSubcategoryNav() {
+
+      const el = document.getElementById("subcategoryBar");
+      const subs = selectedCategory && window._categoryMap[selectedCategory]
+        ? Array.from(window._categoryMap[selectedCategory])
+        : [];
+
+      if (!selectedCategory || subs.length === 0) {
+        el.innerHTML = "";
+        return;
+      }
+
+      el.innerHTML = `
+        <div class="subcategory-pill ${!selectedSubcategory ? "active" : ""}" onclick="selectSubcategory(null)">
+          Усі
+        </div>
+      ` + subs.map(sub => `
+        <div class="subcategory-pill ${selectedSubcategory === sub ? "active" : ""}" onclick="selectSubcategory('${escapeAttr(sub)}')">
+          ${sub}
+        </div>
+      `).join("");
+    }
+
+    function selectCategory(cat) {
+      selectedCategory = cat;
+      selectedSubcategory = null;
+      renderCategoryNav();
+      applyFilters();
+    }
+
+    function selectSubcategory(sub) {
+      selectedSubcategory = sub;
+      renderSubcategoryNav();
+      applyFilters();
+    }
+
+    function applyFilters() {
+
+      const searchValue = (document.getElementById("search").value || "").toLowerCase();
+
+      let filtered = products;
+
+      if (selectedCategory) {
+        filtered = filtered.filter(p => ((p.Category || "").trim() || "Інше") === selectedCategory);
+      }
+
+      if (selectedSubcategory) {
+        filtered = filtered.filter(p => (p.Subcategory || "").trim() === selectedSubcategory);
+      }
+
+      if (searchValue) {
+        filtered = filtered.filter(p => (p.Name || "").toLowerCase().includes(searchValue));
+      }
+
+      renderProducts(filtered);
+    }
+
+    /* RENDER */
+
+    function renderProducts(data) {
+
+      const el = document.getElementById("products");
+      window._displayedProducts = data;
+
+      el.innerHTML = "";
+
+      data.forEach((p, i) => {
+
+        const existing = selected.find(
+          s => String(s.ID) === String(p.ID)
+        );
+
+        const qty = existing ? existing.quantity : 0;
+
+        el.innerHTML += `
+
+        <div class="card">
+
+          <img src="${p.Photo}" />
+
+          <div class="card-body">
+
+            <div class="title">
+              ${p.Name}
+            </div>
+
+            <div class="desc">
+              ${p.Description || ""}
+            </div>
+
+            <div class="info">
+
+              <div>
+                🌍 ${p.Country}
+              </div>
+
+              <div class="price">
+                ${p.Price} UAH
+              </div>
+
+            </div>
+            
+            <div class="card-actions">
+              <button class="qty-btn" onclick="removeOneProduct(${i}, window._displayedProducts || products)">−</button>
+              <div class="qty-value">${qty}</div>
+              <button class="qty-btn" onclick="addProduct(${i}, window._displayedProducts || products)">+</button>
+            </div>
+
+            ${qty > 0 ? `<div class="added-badge">Додано в КП: ${qty}</div>` : ""}
+
+          </div>
+
+        </div>
+
+      `;
+      });
+    }
+
+    /* SEARCH */
+
+    function searchProducts() {
+      applyFilters();
+    }
+
+    /* ADD */
+
+    function addProduct(index, list) {
+
+      const source = list || window._displayedProducts || products;
+
+      const product = source[index];
+
+      const existing = selected.find(
+        p => String(p.ID) === String(product.ID)
+      );
+
+      if (existing) {
+        existing.quantity = Number(existing.quantity || 1) + 1;
+
+        if (existing.discount === undefined) {
+          existing.discount = 0;
+        }
+      } else {
+        selected.push({
+          ...product,
+          quantity: 1,
+          discount: 0
+        });
+      }
+
+      renderKP();
+      renderProducts(window._displayedProducts || products);
+    }
+
+    function removeOneProduct(index, list) {
+
+      const source = list || window._displayedProducts || products;
+      const product = source[index];
+
+      const existingIndex = selected.findIndex(
+        p => String(p.ID) === String(product.ID)
+      );
+
+      if (existingIndex === -1) {
+        return;
+      }
+
+      selected[existingIndex].quantity = Number(selected[existingIndex].quantity || 1) - 1;
+
+      if (selected[existingIndex].quantity <= 0) {
+        selected.splice(existingIndex, 1);
+      }
+
+      renderKP();
+      renderProducts(window._displayedProducts || products);
+    }
+
+    /* REMOVE */
+
+    function removeProduct(index) {
+
+      selected.splice(index, 1);
+
+      renderKP();
+    }
+
+    /* KP */
+
+    function renderKP() {
+
+      const el = document.getElementById("kpItems");
+      const totalEl = document.getElementById("total");
+
+      if (selected.length === 0) {
+
+        el.innerHTML = `
+        <div class="empty">
+          Товари ще не додані
+        </div>
+      `;
+
+        if (totalEl) {
+          totalEl.innerHTML = "Загалом: 0 UAH";
+        }
+
+        return;
+      }
+
+      el.innerHTML = "";
+
+      let total = 0;
+
+      selected.forEach((p, i) => {
+
+        const quantity = Number(p.quantity || 1);
+        const price = parsePrice(p.Price || p.price);
+        const discount = Number(p.discount || 0);
+        const priceWithDiscount = getDiscountedPrice(price, discount);
+        const itemTotal = priceWithDiscount * quantity;
+
+        total += itemTotal;
+
+        el.innerHTML += `
+
+        <div class="kp-item">
+
+          <img src="${p.Photo}" />
+
+          <div class="kp-info">
+
+            <div class="kp-name">
+              ${p.Name}
+            </div>
+
+            <div>
+              ${p.Country}
+            </div>
+
+            <div class="kp-price">
+              ${formatPrice(price)}
+
+              ${discount > 0
+            ? `<div class="kp-discount-price">
+                      ${formatPrice(priceWithDiscount)} зі знижкою
+                    </div>`
+            : ""
+          }
+            </div>
+
+            <div class="kp-qty">
+              Кількість у КП: ${quantity}
+            </div>
+
+            <div class="discount-box">
+              <label>Знижка, %</label>
+              <input
+                  type="text"
+                  inputmode="decimal"
+                  placeholder="0"
+                  value="${p.discount ?? ""}"
+                  oninput="updateDiscount(${i}, this.value)"
+                  onblur="renderKP()"
+                  class="discount-input"
+              />  
+               <span>%</span>
+            </div>
+
+            <button
+              class="remove-btn"
+              onclick="removeProduct(${i})"
+            >
+              Видалити
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+      });
+
+      if (totalEl) {
+        totalEl.innerHTML = `
+        Загалом: ${formatPrice(total)}
+      `;
+      }
+    }
+
+    function productFieldsForDocx(p) {
+      const title = String(p.Name || "").trim();
+      const description = String(p.Description || "").trim();
+      const countryName = String(p.Country || "").trim();
+      const country = countryName ? `країна виробник: ${countryName}` : "";
+      return { title, description, country };
+    }
+
+    window.downloadDOCX = async function () {
+      const btn = document.getElementById("downloadBtn");
+
+      if (btn.disabled) {
+        return;
+      }
+
+      btn.disabled = true;
+      btn.classList.add("loading");
+      btn.innerHTML = `<span class="spinner"></span> Генерується...`;
+
+      try {
+        const payload = {
+          clientName: document.getElementById("clientName").value || "Client",
+          grandTotalEnabled: document.getElementById("grandTotalCheckbox").checked,
+          clientDate: document.getElementById("clientDate").value || "",
+          managerPhone: managers[document.getElementById("managerSelect").value]?.Phone || "",
+          managerEmail: managers[document.getElementById("managerSelect").value]?.Email || "",
+          managerName: managers[document.getElementById("managerSelect").value]?.Name || "",
+          installmentText: document.getElementById("installmentCheckbox").checked
+            ? `Умови співпраці:
+          1. 100% передплата — надається знижка 15% від вартості обладнання.
+          2. 50% передплата + 50% після інсталяції (протягом 7 календарних днів) — надається знижка 10%.
+          3. 50% передплата + 50% у розстрочку після поставки (двома рівними платежами протягом 2 місяців) — надається знижка 5%. Вартість фіксується, без прив’язки до зміни валютного курсу.
+          4. Розстрочка на 3 рівні платежі — перший платіж здійснюється напередодні поставки, наступні платежі — кожні 30 календарних днів. Оплата здійснюється за прайсовою вартістю, без прив’язки до зміни валютного курсу.`
+            : "",
+          longInstallmentText: document.getElementById("longInstallmentCheckbox").checked
+            ? `Умови співпраці:
+              1. 100% передплата — надається знижка 15% від вартості обладнання.
+              2. 50% передплата + 50% у розстрочку на 3 рівні платежі — надається знижка 5%. Вартість фіксується без прив’язки до зміни валютного курсу.
+              3. Розстрочка на 4–6 місяців рівними платежами — оплата здійснюється відповідно до погодженого графіка, з прив’язкою вартості до зміни валютного курсу.`
+            : "",
+          deliveryText: document.getElementById("deliveryCheckbox").checked
+            ? "У вартість обладнання входить доставка та налаштування"
+            : "",
+
+
+          products: selected.map(p => {
+            const price = parsePrice(p.Price || p.price);
+            const discount = Number(p.discount || 0);
+            const priceWithDiscount = getDiscountedPrice(price, discount);
+
+            return {
+              ...p,
+              discount,
+              priceOriginal: price,
+              priceWithDiscount
+            };
+          })
+        };
+
+        const res = await fetch(`${BACKEND_URL}/generate`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          alert("Помилка генерації КП");
+          return;
+        }
+
+        const blob = await res.blob();
+
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+
+        const clientName =
+        (document.getElementById("clientName").value || "Клієнт")
+          .trim()
+          .replace(/[\\/:*?"<>|]/g, "_");
+
+      const selectedDate = document.getElementById("clientDate").value;
+
+      let formattedDate = "Без_дати";
+
+      if (selectedDate) {
+        const [year, month, day] = selectedDate.split("-");
+        formattedDate = `${day}.${month}.${year}`;
+      }
+
+      a.href = url;
+      a.download = `КП_${formattedDate}_${clientName}.docx`;
+
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+
+        window.URL.revokeObjectURL(url);
+
+      } catch (err) {
+        alert("Помилка генерації КП");
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+        btn.classList.remove("loading");
+        btn.innerHTML = "📄 Завантажити DOCX";
+      }
+    };
+
+  const dateInput = document.getElementById("clientDate");
+
+  if (!dateInput.value) {
+    dateInput.value = new Date().toISOString().split("T")[0];
+  }
+
+  if(localStorage.getItem("logged")==="true"){
+
+        document.getElementById("loginPage").style.display="none";
+    document.getElementById("app").style.display="block";
+
+    loadProducts();
+    loadManagers();
+
+    }else{
+
+    document.getElementById("loginPage").style.display="flex";
+    document.getElementById("app").style.display="none";
+
+    }
+
+  </script>
+  </div>
+
+</body>
+
+</html>
+
+

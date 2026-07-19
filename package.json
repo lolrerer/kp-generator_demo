@@ -1,0 +1,26 @@
+{
+    "name": "proposalpro_demo",
+    "version": "1.0.0",
+    "description": "ProposalPro - Demo commercial proposal (KP) generator",
+    "main": "server.js",
+    "type": "module",
+    "scripts": {
+      "start": "node server.js",
+      "dev": "node server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "axios": "^1.16.1",
+      "body-parser": "^2.2.2",
+      "cors": "^2.8.6",
+      "docxtemplater": "^3.68.7",
+      "docxtemplater-image-module-free": "^1.1.1",
+      "express": "^5.2.1",
+      "fs-extra": "^11.3.5",
+      "image-size": "^2.0.2",
+      "jszip": "^3.10.1",
+      "pizzip": "^3.2.0"
+    }
+  }
